@@ -1,0 +1,57 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Baloo 2', system-ui, sans-serif;
+  --font-display: 'Yatra One', 'Baloo 2', serif;
+  --color-parchment: #fff8ec;
+  --color-saffron: #f97316;
+  --color-gold: #f5b301;
+  --color-maroon: #7a1f2b;
+  --color-ink: #3b1d12;
+}
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  color: var(--color-ink);
+  background-color: var(--color-parchment);
+  background-image:
+    radial-gradient(circle at 15% 10%, rgba(245, 179, 1, 0.18), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgba(249, 115, 22, 0.14), transparent 45%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%237a1f2b' stroke-opacity='0.05' stroke-width='1.5'%3E%3Ccircle cx='40' cy='40' r='18'/%3E%3Ccircle cx='40' cy='40' r='28'/%3E%3Cpath d='M40 12v56M12 40h56'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
+  font-family: var(--font-sans);
+}
+
+@utility card {
+  @apply rounded-3xl bg-white/85 shadow-[0_8px_30px_rgba(122,31,43,0.10)] ring-1 ring-maroon/10 backdrop-blur;
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-2.5 font-bold transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-40;
+}
+@utility btn-primary {
+  @apply btn bg-gradient-to-b from-saffron to-orange-600 text-white shadow-lg shadow-orange-500/30 hover:brightness-110;
+}
+@utility btn-ghost {
+  @apply btn bg-white text-maroon ring-1 ring-maroon/20 hover:bg-orange-50;
+}
+@utility btn-danger {
+  @apply btn bg-red-600 text-white hover:bg-red-700;
+}
+@utility btn-success {
+  @apply btn bg-emerald-600 text-white hover:bg-emerald-700;
+}
+@utility input {
+  @apply w-full rounded-xl border border-maroon/20 bg-white px-3 py-2 outline-none focus:border-saffron focus:ring-2 focus:ring-saffron/30;
+}
+@utility label {
+  @apply mb-1 block text-sm font-semibold text-maroon/80;
+}
+.title-font { font-family: var(--font-display); }
+
+@keyframes pop { 0% { transform: scale(.6); opacity: 0 } 70% { transform: scale(1.08) } 100% { transform: scale(1); opacity: 1 } }
+.animate-pop { animation: pop .45s ease-out both; }
+@keyframes shake { 0%,100% { transform: translateX(0) } 25% { transform: translateX(-6px) } 75% { transform: translateX(6px) } }
+.animate-shake { animation: shake .3s ease-in-out 2; }
+@keyframes floaty { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+.animate-floaty { animation: floaty 3s ease-in-out infinite; }

@@ -1,0 +1,20 @@
+// Activity 2: Main Kaun Hoon? (Who Am I?)
+// Clues go from hard to easy. The earlier a team guesses, the more points they get.
+export const CARDS = [
+  { id: 'c01', answer: 'Hanuman', emoji: '🐒', clues: ['I can become as big as a mountain or as small as a fly.', 'My father is Vayu, the wind god.', 'I carried a mountain in one hand.', 'I am Rama’s greatest devotee. Jai Bajrang Bali!'], value: 'Devotion' },
+  { id: 'c02', answer: 'Jatayu', emoji: '🦅', clues: ['I was a friend of King Dasharatha.', 'I was very old, but very brave.', 'I fought Ravana in the sky.', 'I am a giant eagle who tried to save Sita.'], value: 'Courage' },
+  { id: 'c03', answer: 'Shabari', emoji: '🫐', clues: ['I lived in the ashram of Sage Matanga.', 'I waited for someone every single day for many years.', 'I swept the path with flowers.', 'I tasted berries before giving them to Rama.'], value: 'Faith' },
+  { id: 'c04', answer: 'Lakshmana', emoji: '🏹', clues: ['I did not sleep for 14 years.', 'My twin brother is Shatrughna.', 'I drew a line that Sita was asked not to cross.', 'I am Rama’s brother who went with him to the forest.'], value: 'Service' },
+  { id: 'c05', answer: 'Bharata', emoji: '👣', clues: ['My mother is Kaikeyi.', 'I could have been king, but I said no.', 'I lived like a hermit outside Ayodhya.', 'I put Rama’s sandals on the throne.'], value: 'Brotherly love' },
+  { id: 'c06', answer: 'Vibhishana', emoji: '🙏', clues: ['I lived in Lanka.', 'I always chanted the name of Lord Vishnu.', 'I left my own brother because he did wrong.', 'Rama made me King of Lanka.'], value: 'Righteousness' },
+  { id: 'c07', answer: 'Kumbhakarna', emoji: '😴', clues: ['I am a giant.', 'I asked for a boon but my words got mixed up.', 'Waking me up took drums, elephants and lots of food!', 'I sleep for six months at a time.'], value: 'Be careful with your words' },
+  { id: 'c08', answer: 'Sugriva', emoji: '🐵', clues: ['I hid on Rishyamukha mountain.', 'My brother Vali was angry with me.', 'I became friends with Rama beside a sacred fire.', 'I am the King of the Vanaras.'], value: 'Friendship' },
+  { id: 'c09', answer: 'King Dasharatha', emoji: '👑', clues: ['I could shoot an arrow just by hearing a sound.', 'I had three queens.', 'I gave two boons that I later regretted.', 'I am Rama’s father, King of Ayodhya.'], value: 'Keeping promises' },
+  { id: 'c10', answer: 'Sita', emoji: '🌸', clues: ['I was found in a field by a king who was ploughing.', 'My father is King Janaka.', 'I spent many days in the Ashoka garden.', 'I am Rama’s wife.'], value: 'Purity and patience' },
+  { id: 'c11', answer: 'Ravana', emoji: '👹', clues: ['I was a great scholar and a devotee of Shiva.', 'My kingdom was made of gold.', 'I had a flying chariot called Pushpaka.', 'I have ten heads.'], value: 'Pride leads to a fall' },
+  { id: 'c12', answer: 'Guha', emoji: '🛶', clues: ['I was the chief of the hunters and boatmen.', 'I was Rama’s friend from childhood days.', 'I lived near the river Ganga.', 'I took Rama across the river in my boat.'], value: 'Friendship' },
+  { id: 'c13', answer: 'Jambavan', emoji: '🐻', clues: ['I am one of the oldest heroes in the story.', 'I saw Lord Vishnu as Vamana.', 'I reminded Hanuman of his own hidden powers.', 'I am the wise king of the bears.'], value: 'Wisdom' },
+  { id: 'c14', answer: 'The Little Squirrel', emoji: '🐿️', clues: ['I am very, very small.', 'I rolled in the sand again and again.', 'Rama stroked my back and left three lines on it.', 'I helped build the bridge to Lanka.'], value: 'No seva is too small' },
+  { id: 'c15', answer: 'Sage Vishwamitra', emoji: '🧘', clues: ['I was a king before I became a sage.', 'I taught Rama special divine weapons.', 'I took Rama and Lakshmana to Mithila.', 'Rama protected my yagna from demons.'], value: 'Respect for teachers' },
+  { id: 'c16', answer: 'Angada', emoji: '🦵', clues: ['My father was Vali.', 'I was sent to Ravana’s court as Rama’s messenger.', 'Nobody in the court could move my foot!', 'I am a brave young vanara prince.'], value: 'Confidence' },
+];
