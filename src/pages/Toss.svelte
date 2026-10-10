@@ -10,6 +10,8 @@
   let shown = $state(null);
   let lucky = $state(null);
   let applied = $state('');
+  let mode = $state('lucky'); // lucky | manual
+  let manual = $state([]); // team ids in the order the host taps them
 
   const allPicked = $derived(config.teams.every((t) => picks[t.id] != null));
   const takenBy = (n) => config.teams.find((t) => picks[t.id] === n);
@@ -61,23 +63,99 @@
     return [...ids.slice(i), ...ids.slice(0, i)];
   }
 
-  function apply(which) {
-    const order = rotationFrom(winner.id);
-    if (which !== 'whoami') game.puzzle.order = order;
-    if (which !== 'puzzle') game.whoami.order = order;
-    game.toss = { lucky, picks: { ...picks }, winner: winner.id, at: Date.now() };
+  function apply(which, order) {
+    if (which !== 'whoami') game.puzzle.order = [...order];
+    if (which !== 'puzzle') game.whoami.order = [...order];
+    game.toss = mode === 'lucky'
+      ? { mode, lucky, picks: { ...picks }, winner: winner.id, at: Date.now() }
+      : { mode, order: [...order], at: Date.now() };
     applied = which;
     sfx.reveal();
+  }
+
+  function setMode(m) {
+    mode = m;
+    applied = '';
+  }
+
+  function tapTeam(id) {
+    applied = '';
+    manual = manual.includes(id) ? manual.filter((x) => x !== id) : [...manual, id];
+    sfx.click();
   }
 
   function reset() {
     picks = Object.fromEntries(config.teams.map((t) => [t.id, null]));
     lucky = null;
     shown = null;
+    manual = [];
     applied = '';
   }
 </script>
 
+{#snippet applyButtons(order)}
+  <div class="mt-5 grid w-full gap-2">
+    <button class="btn-primary" onclick={() => apply('both', order)}>Use for both activities</button>
+    <div class="grid grid-cols-2 gap-2">
+      <button class="btn-ghost text-sm" onclick={() => apply('puzzle', order)}>🧩 Puzzle only</button>
+      <button class="btn-ghost text-sm" onclick={() => apply('whoami', order)}>❓ Who Am I only</button>
+    </div>
+    {#if applied}<p class="font-bold text-emerald-600">✓ Turn order saved</p>{/if}
+  </div>
+{/snippet}
+
+<div class="mb-6 flex justify-center">
+  <div class="inline-flex rounded-2xl bg-white p-1 shadow ring-1 ring-maroon/10">
+    <button class="rounded-xl px-4 py-2 font-bold transition {mode === 'lucky' ? 'bg-maroon text-white' : 'text-maroon hover:bg-orange-50'}" onclick={() => setMode('lucky')}>🎲 Lucky Number Toss</button>
+    <button class="rounded-xl px-4 py-2 font-bold transition {mode === 'manual' ? 'bg-maroon text-white' : 'text-maroon hover:bg-orange-50'}" onclick={() => setMode('manual')}>✋ Set order myself</button>
+  </div>
+</div>
+
+{#if mode === 'manual'}
+  <div class="text-center">
+    <h1 class="title-font text-5xl text-maroon">✋ Set the Team Order</h1>
+    <p class="mt-1 text-lg text-ink/70">Tap the teams in the order they will play. Tap a team again to remove it.</p>
+  </div>
+
+  <div class="mx-auto mt-8 grid max-w-5xl gap-6 lg:grid-cols-[1fr_340px]">
+    <div class="grid grid-cols-2 gap-3">
+      {#each config.teams as t (t.id)}
+        {@const pos = manual.indexOf(t.id)}
+        <button
+          class="card relative flex flex-col items-center p-6 transition hover:-translate-y-1 {pos >= 0 ? 'ring-4' : ''}"
+          style="--tw-ring-color: {t.color}"
+          onclick={() => tapTeam(t.id)}
+        >
+          {#if pos >= 0}
+            <span class="animate-pop absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full text-xl font-extrabold text-white shadow" style="background: {t.color}">{pos + 1}</span>
+          {/if}
+          <span class="text-6xl">{t.emoji}</span>
+          <span class="title-font mt-2 text-3xl" style="color: {t.color}">{t.name}</span>
+          <span class="text-sm text-ink/60">{t.tagline}</span>
+        </button>
+      {/each}
+    </div>
+
+    <div class="card flex flex-col p-6 text-center">
+      <div class="text-sm font-bold uppercase tracking-widest text-ink/50">Playing order</div>
+      <ol class="mt-4 space-y-2">
+        {#each config.teams as _, i}
+          {@const id = manual[i]}
+          <li class="flex items-center gap-3 rounded-2xl px-3 py-2 {id ? 'bg-orange-50' : 'border-2 border-dashed border-maroon/15'}">
+            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-maroon font-bold text-white">{i + 1}</span>
+            {#if id}<TeamBadge team={team(id)} />{:else}<span class="text-ink/30">Tap a team…</span>{/if}
+          </li>
+        {/each}
+      </ol>
+      {#if manual.length === config.teams.length}
+        {@render applyButtons(manual)}
+      {:else}
+        <p class="mt-4 text-sm text-ink/50">Choose all {config.teams.length} teams to save the order.</p>
+      {/if}
+      {#if manual.length}<button class="btn-ghost mt-2 text-sm" onclick={() => { manual = []; applied = ''; }}>↺ Clear</button>{/if}
+    </div>
+  </div>
+{:else}
 <div class="text-center">
   <h1 class="title-font text-5xl text-maroon">🎲 The Lucky Number Toss</h1>
   <p class="mt-1 text-lg text-ink/70">
@@ -132,15 +210,9 @@
           Order: {rotationFrom(winner.id).map((id) => team(id).name).join(' → ')}
         </div>
       </div>
-      <div class="mt-5 grid w-full gap-2">
-        <button class="btn-primary" onclick={() => apply('both')}>Use for both activities</button>
-        <div class="grid grid-cols-2 gap-2">
-          <button class="btn-ghost text-sm" onclick={() => apply('puzzle')}>🧩 Puzzle only</button>
-          <button class="btn-ghost text-sm" onclick={() => apply('whoami')}>❓ Who Am I only</button>
-        </div>
-        {#if applied}<p class="font-bold text-emerald-600">✓ Turn order saved</p>{/if}
-        <button class="btn-ghost text-sm" onclick={reset}>↺ Toss again</button>
-      </div>
+      {@render applyButtons(rotationFrom(winner.id))}
+      <button class="btn-ghost mt-2 w-full text-sm" onclick={reset}>↺ Toss again</button>
     {/if}
   </div>
 </div>
+{/if}
